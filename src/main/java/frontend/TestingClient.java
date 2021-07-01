@@ -18,6 +18,7 @@ public class TestingClient {
 		System.out.print(summary);
 		String head= consumer.head();
 		System.out.println(head);
+		System.out.println("Hello Othmaaaaaaaaaaaaaan");
 	}
 	
 	
