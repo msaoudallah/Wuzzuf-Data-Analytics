@@ -25,18 +25,19 @@ public class Apis {
 	// TODO
 	// read the csv file, and display head rows
 	// change signature if needed
-	@GetMapping("/wuzzuf/head/")
-	public String sample() {
+	@GetMapping("/wuzzuf/head")
+	public String head() throws IOException
+	{
+		Table df = Table.read().csv("Wuzzuf_Jobs.csv");
+		Table head= df.first(5);
 
-		String res ="test";
-
-		return res;
+		return head.toString();
 	}	
 	
 	
 	
 	//2. Display structure and summary of the data.
-	@GetMapping("/wuzzuf/summary")
+		@GetMapping("/wuzzuf/summary")
 	public String summary() throws IOException, URISyntaxException {
 
 		String res ="";

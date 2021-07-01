@@ -17,9 +17,12 @@ public class TestingClient {
 		String summary = consumer.summary();			
 		System.out.print(summary);
 		System.out.print("This is Samyyyyy");
-		System.out.print("This is Samyyy from CLI");
 
 
+		String head= consumer.head();
+		System.out.println(head);
+
+		
 	}
 	
 	
