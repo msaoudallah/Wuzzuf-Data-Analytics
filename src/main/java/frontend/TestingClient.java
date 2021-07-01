@@ -17,6 +17,10 @@ public class TestingClient {
 		String summary = consumer.summary();			
 		System.out.print(summary);
 
+
+		String head= consumer.head();
+		System.out.println(head);
+
 		
 	}
 	
