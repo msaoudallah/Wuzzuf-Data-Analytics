@@ -52,7 +52,7 @@ public class Apis {
 		
 	
 
-	//3. Clean the data (null, duplications)
+	//3. Clean the data (null, duplications) @Othman
 	
 	// TODO
 	// read the csv file, clean it
@@ -68,8 +68,8 @@ public class Apis {
 	}	
 	
 	
-	//4. Count the jobs for each company and display that in order (What are the most demanding companies for jobs?)
-	//5. Show step 4 in a pie chart 	
+	//4. Count the jobs for each company and display that in order (What are the most demanding companies for jobs?) @Othman
+	//5. Show step 4 in a pie chart 	@Othman
 	
 	// TODO
 	// read the new csv file
@@ -85,8 +85,8 @@ public class Apis {
 	}	
 	
 	
-	//6. Find out What are it the most popular job titles? 
-	//7. Show step 6 in bar chart
+	//6. Find out What are it the most popular job titles?  @Samy
+	//7. Show step 6 in bar chart @Samy
 	// TODO
 	// read the new csv file
 	// do step 6
@@ -101,8 +101,8 @@ public class Apis {
 	}	
 	
 	
-	//8. Find out the most popular areas?
-	//9. Show step 8 in bar chart 
+	//8. Find out the most popular areas?   @Samy
+	//9. Show step 8 in bar chart       @Samy
 
 
 	// TODO
@@ -119,7 +119,7 @@ public class Apis {
 	}	
 	
 	
-	//10. Print skills one by one and how many each repeated and order the output to 
+	//10. Print skills one by one and how many each repeated and order the output to  @SAIDDDDDDD
 	//find out the most important skills required?
 	
 	
