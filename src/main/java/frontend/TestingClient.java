@@ -16,6 +16,7 @@ public class TestingClient {
 		
 		String summary = consumer.summary();			
 		System.out.print(summary);
+		System.out.print("This is Samyyyyy");
 
 		
 	}
