@@ -9,28 +9,27 @@ import joinery.DataFrame;
 
 public class Consumer {
 
-	
-	
 	@Autowired
 	RestTemplate restTemplate = new RestTemplate();
-
+	
 	final String ROOT_URI = "http://localhost:8080/wuzzuf/";
 
-	public List<Wuzzuf> getAllJobs() {
-		Wuzzuf[] wl = restTemplate.getForObject(ROOT_URI+"all", Wuzzuf[].class);
-		return Arrays.asList(wl);
+	// to be updated
+	public String head() {
+		String head = restTemplate.getForObject(ROOT_URI+"head", String.class);
+		return head;
+
 	}
 	
-	public DataFrame jobs() {
-		DataFrame df = restTemplate.getForObject(ROOT_URI+"jobs", DataFrame.class);
-		return df;
-
-	}	
-
+	
 	public String summary() {
 		String summary = restTemplate.getForObject(ROOT_URI+"summary", String.class);
 		return summary;
 
 	}	
+	
+	
+	
+	
 
 }
