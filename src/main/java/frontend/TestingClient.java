@@ -16,16 +16,8 @@ public class TestingClient {
 		
 		String summary = consumer.summary();			
 		System.out.print(summary);
-		System.out.print("This is Samyyyyy");
-
-
 		String head= consumer.head();
 		System.out.println(head);
-
-
-		System.out.println("This is your doing sammyyyyyyyy");
-
-		
 	}
 	
 	
