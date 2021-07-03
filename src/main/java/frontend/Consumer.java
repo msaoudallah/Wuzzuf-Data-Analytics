@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 import dao.Wuzzuf;
 import joinery.DataFrame;
+import tech.tablesaw.plotly.components.Figure;
 
 public class Consumer {
 
@@ -26,8 +27,26 @@ public class Consumer {
 		String summary = restTemplate.getForObject(ROOT_URI+"summary", String.class);
 		return summary;
 
-	}	
-	
+	}
+
+	public String clean()
+	{
+		String clean= restTemplate.getForObject(ROOT_URI+"clean", String.class);
+		return clean;
+	}
+
+	public String jobsPerCompany()
+	{
+		String jobsPerCompany= restTemplate.getForObject(ROOT_URI+ "jobs/companies", String.class);
+		return jobsPerCompany;
+	}
+
+
+	public String jobsPerCompanyPie()
+	{
+		String jobsPerCompanyPie= restTemplate.getForObject(ROOT_URI+ "jobs/pieChart", String.class);
+		return jobsPerCompanyPie;
+	}
 	
 	
 	
