@@ -8,9 +8,26 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+<<<<<<< HEAD
 import org.apache.commons.csv.CSVFormat;
+=======
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTPieChart;
+>>>>>>> branch 'master' of https://msaoudallah@github.com/msaoudallah/repo.git
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import static tech.tablesaw.aggregate.AggregateFunctions.*;
+
+import tech.tablesaw.api.*;
+import tech.tablesaw.plotly.api.*;
+import tech.tablesaw.plotly.components.Figure;
+import tech.tablesaw.plotly.components.Layout;
+import tech.tablesaw.plotly.components.Page;
+import tech.tablesaw.plotly.display.Browser;
+import tech.tablesaw.plotly.Plot;
+import tech.tablesaw.plotly.api.PiePlot;
+import tech.tablesaw.plotly.components.Figure;
+import tech.tablesaw.plotly.components.Layout;
+
 
 import dao.Wuzzuf;
 import dao.WuzzufDAOImp;
@@ -25,6 +42,7 @@ import smile.io.Read;
 import smile.io.Write;
 import smile.neighbor.lsh.Hash;
 //import tech.tablesaw.*;
+//import smile.plot.swing.Plot;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 
@@ -71,14 +89,25 @@ public class Apis {
 	// reomove null and duplicate rows
 	// change signature if needed
 	// save the new file into csv such that we use it in next steps
-	@GetMapping("/wuzzuf/clean/")
-	public String clean() {
+	@GetMapping("/wuzzuf/clean")
+	public String clean() throws  IOException
+	{
+		Table df= Table.read().csv("Wuzzuf_Jobs.csv");
+		Table temp = df.dropDuplicateRows();
+		Table result= temp.dropRowsWithMissingValues();
 
-		String res ="test";
-
-		return res;
+		return "Shape before removing duplicates: "+ df.shape()+"\nAfter: "+temp.shape()+
+				"\nShape before removing nulls: "+ temp.shape()+ "\nAfter: "+ result.shape();
 	}	
-	
+
+	// this function is used to return data after duplicates, and nulls have been removed
+	public Table cleaned_df() throws IOException
+	{
+		Table df= Table.read().csv("Wuzzuf_Jobs.csv");
+		Table temp = df.dropDuplicateRows();
+		Table result= temp.dropRowsWithMissingValues();
+		return result;
+	}
 	
 	//4. Count the jobs for each company and display that in order (What are the most demanding companies for jobs?) @Othman
 	//5. Show step 4 in a pie chart 	@Othman
@@ -89,13 +118,32 @@ public class Apis {
 	// check how to return a pie chart (png file) ? 
 	// change signature if needed
 	@GetMapping("/wuzzuf/jobs/companies")
-	public String jobsPerCompany() {
+	public String jobsPerCompany() throws IOException
+	{
+		Table df= cleaned_df();
+		Table jobsPerCompany= df.retainColumns("Company", "Title");
+		Table summary= jobsPerCompany.summarize("Title",  count).by("Company");
+		Table summary1= summary.sortDescendingOn("Count [Title]");
+//		String cout_summ= summary1.summarize("Count [Title]", sum).apply().toString();
+		return summary1.toString();//+ "\n "+ cout_summ;
 
-		String res ="test";
+	}
 
-		return res;
-	}	
-	
+	@GetMapping("/wuzzuf/jobs/pieChart")
+	public String jobsPerCompanyPie() throws IOException
+	{
+		Table df= cleaned_df();
+		Table jobsPerCompany= df.retainColumns("Company", "Title");
+		Table summary= jobsPerCompany.summarize("Title",  count).by("Company");
+		Table summary1= summary.sortDescendingOn("Count [Title]");
+
+		Table tablePieCharted= summary1.first(10);
+		Figure f = PiePlot.create("Jobs/Company", tablePieCharted, "Company", "Count [Title]");
+		Plot.show(f);
+
+//		Plot.show(new Figure(layout, trace));
+		return tablePieCharted.toString();
+	}
 	
 	//6. Find out What are it the most popular job titles?  @Samy
 	//7. Show step 6 in bar chart @Samy

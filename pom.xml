@@ -8,6 +8,8 @@
 		<relativePath/>
 		<!-- lookup parent from repository -->
 	</parent>
+
+
 	<groupId>com.example</groupId>
 	<artifactId>Application</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -91,6 +93,26 @@
 			<artifactId>tablesaw-core</artifactId>
 			<version>0.38.2</version>
 		</dependency>
+
+		<dependency>
+			<groupId>tech.tablesaw</groupId>
+			<artifactId>tablesaw-jsplot</artifactId>
+			<version>0.38.2</version>
+		</dependency>
+		<!-- Thanks for using https://jar-download.com -->
+
+
+		<!-- https://mvnrepository.com/artifact/org.plotly-scala/plotly-core -->
+		<dependency>
+			<groupId>org.plotly-scala</groupId>
+			<artifactId>plotly-core_2.13</artifactId>
+			<version>0.8.1</version>
+		</dependency>
+
+
+
+
+
 	</dependencies>
 	<build>
 		<plugins>
