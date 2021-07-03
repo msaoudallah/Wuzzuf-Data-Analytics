@@ -17,15 +17,6 @@ import static tech.tablesaw.aggregate.AggregateFunctions.*;
 //import tech.tablesaw.*;
 //import smile.plot.swing.Plot;
 import tech.tablesaw.api.*;
-import tech.tablesaw.plotly.api.*;
-import tech.tablesaw.plotly.components.Figure;
-import tech.tablesaw.plotly.components.Layout;
-import tech.tablesaw.plotly.components.Page;
-import tech.tablesaw.plotly.display.Browser;
-import tech.tablesaw.plotly.Plot;
-import tech.tablesaw.plotly.api.PiePlot;
-import tech.tablesaw.plotly.components.Figure;
-import tech.tablesaw.plotly.components.Layout;
 
 
 import dao.Wuzzuf;
@@ -39,8 +30,12 @@ import smile.data.vector.IntVector;
 import smile.io.CSV;
 import smile.io.Read;
 import smile.io.Write;
-import smile.neighbor.lsh.Hash;
 import tech.tablesaw.columns.Column;
+
+//import tech.tablesaw.*;
+import tech.tablesaw.aggregate.AggregateFunctions;
+import tech.tablesaw.api.Row;
+import tech.tablesaw.api.Table;
 
 
 @RestController
@@ -134,9 +129,9 @@ public class Apis {
 
 		Table tablePieCharted= summary1.first(10);
 //		Table other= summary1.dropWhere(summary1)
-		
+
 		HashMap<String,Double> hm = new HashMap<String,Double> ();
-		
+
 		for (Row row : tablePieCharted) {
 			hm.put(row.getString("Company"),row.getDouble("Count [Title]"));
 		}
@@ -153,11 +148,16 @@ public class Apis {
 	// check how to return a pie chart (png file) ? 
 	// change signature if needed
 	@GetMapping("/wuzzuf/jobs/count")
-	public String jobsCount() {
+	public HashMap<String,Integer> jobsCount() throws IOException, URISyntaxException {
 
-		String res ="test";
-
-		return res;
+		Table wuzzuf_jobs = Table.read().csv("Wuzzuf_Jobs.csv");
+		Table results = wuzzuf_jobs.countBy("Title").sortDescendingOn("Count").first(10);
+		HashMap<String,Integer> intermediate = new HashMap<>();
+		for (Row i:results)
+		{
+			intermediate.put(i.getString("Category"),i.getInt("Count"));
+		}
+		return intermediate;
 	}	
 	
 	
@@ -171,11 +171,16 @@ public class Apis {
 	// check how to return a bar chart (png file) ? 
 	// change signature if needed
 	@GetMapping("/wuzzuf/areas/count")
-	public String areasCount() {
+	public HashMap<String,Integer> areasCount() throws IOException, URISyntaxException {
 
-		String res ="test";
-
-		return res;
+		Table wuzzuf_jobs = Table.read().csv("Wuzzuf_Jobs.csv");
+		Table results = wuzzuf_jobs.countBy("Location").sortDescendingOn("Count").first(10);
+		HashMap<String,Integer> intermediate = new HashMap<>();
+		for (Row i:results)
+		{
+			intermediate.put(i.getString("Category"),i.getInt("Count"));
+		}
+		return intermediate;
 	}	
 	
 	
@@ -196,7 +201,7 @@ public class Apis {
 		Table df = Table.read().csv("Wuzzuf_Jobs.csv");
 		String res = "";
 		Column<String> skills = (Column<String>) df.column("Skills");
-		
+
 		HashMap<String,Integer> skillsMap = new HashMap<String,Integer> ();
 		for (String s : skills) {
 			String[] jobskills = s.split(", ");
@@ -224,24 +229,24 @@ public class Apis {
 	public int[] yearsExpFactorization() throws IOException, URISyntaxException {
 
 		CSVFormat format = CSVFormat.DEFAULT.withFirstRecordAsHeader ();
-		smile.data.DataFrame df = Read.csv("Wuzzuf_Jobs.csv",format);  
-		
+		smile.data.DataFrame df = Read.csv("Wuzzuf_Jobs.csv",format);
+
 
 		String[] values = df.stringVector("YearsExp").distinct().toArray (new String[]{});
 		int[] res = df.stringVector("YearsExp").factorize(  new NominalScale(values) ).toIntArray();
 
-		
+
 		BaseVector bs =   df.stringVector("YearsExp_Factorized").factorize( new NominalScale(values));
 		smile.data.DataFrame  YearsExp = smile.data.DataFrame.of(bs);
-		
+
 		df = df.merge(df,YearsExp);
-		
+
 
 
 		File f = java.io.File.createTempFile("Factorized", "csv");
-		
+
 		Write.csv(df, f.toPath(), format);
-		
+
 		return res;
 	}	
 	

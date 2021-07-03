@@ -63,7 +63,8 @@ public class Consumer {
 		HashMap<String,Double> jobsPerCompanyPie= restTemplate.getForObject(ROOT_URI+ "jobs/pieChart", HashMap.class);
 		return jobsPerCompanyPie;
 	}
-	
+
+
 	
 	
 

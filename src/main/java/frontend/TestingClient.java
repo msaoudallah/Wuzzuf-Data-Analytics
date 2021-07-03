@@ -3,13 +3,7 @@ package frontend;
 import static tech.tablesaw.aggregate.AggregateFunctions.count;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,7 +25,8 @@ public class TestingClient {
 	public static void main(String[] args) throws IOException {
 	
 		int x=0;
-		
+		Scanner sc = new Scanner(System.in);
+		x = sc.nextInt();
 		switch (x) {
 		case 1: //data summary
 			System.out.print(consumer.summary());
@@ -55,9 +50,9 @@ public class TestingClient {
 			    Companies.add(entry.getKey());
 			});
 			
-			PieChart chart =
-				    new PieChartBuilder().width(800).height(600).title("Pie Chart with 4 Slices").build();
-			
+			PieChart chart = new PieChartBuilder().width(800).height(600).title("Pie Chart with 4 Slices").build();
+			new SwingWrapper(chart).displayChart();
+
 			for (int i =0; i<Count.size(); i++) {
 				
 				chart.addSeries(Companies.get(i),Count.get(i));
@@ -113,7 +108,6 @@ public class TestingClient {
 		
 		
 		
-		new SwingWrapper(chart).displayChart();
 
 		
 		
