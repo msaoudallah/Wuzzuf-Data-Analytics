@@ -8,11 +8,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-<<<<<<< HEAD
 import org.apache.commons.csv.CSVFormat;
-=======
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPieChart;
->>>>>>> branch 'master' of https://msaoudallah@github.com/msaoudallah/repo.git
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import static tech.tablesaw.aggregate.AggregateFunctions.*;
