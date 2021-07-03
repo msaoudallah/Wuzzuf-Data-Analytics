@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import static tech.tablesaw.aggregate.AggregateFunctions.*;
 
+//import tech.tablesaw.*;
+//import smile.plot.swing.Plot;
 import tech.tablesaw.api.*;
 import tech.tablesaw.plotly.api.*;
 import tech.tablesaw.plotly.components.Figure;
@@ -38,9 +40,6 @@ import smile.io.CSV;
 import smile.io.Read;
 import smile.io.Write;
 import smile.neighbor.lsh.Hash;
-//import tech.tablesaw.*;
-//import smile.plot.swing.Plot;
-import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 
 
@@ -121,13 +120,12 @@ public class Apis {
 		Table jobsPerCompany= df.retainColumns("Company", "Title");
 		Table summary= jobsPerCompany.summarize("Title",  count).by("Company");
 		Table summary1= summary.sortDescendingOn("Count [Title]");
-//		String cout_summ= summary1.summarize("Count [Title]", sum).apply().toString();
 		return summary1.toString();//+ "\n "+ cout_summ;
 
 	}
 
 	@GetMapping("/wuzzuf/jobs/pieChart")
-	public String jobsPerCompanyPie() throws IOException
+	public HashMap<String,Double> jobsPerCompanyPie() throws IOException
 	{
 		Table df= cleaned_df();
 		Table jobsPerCompany= df.retainColumns("Company", "Title");
@@ -135,11 +133,16 @@ public class Apis {
 		Table summary1= summary.sortDescendingOn("Count [Title]");
 
 		Table tablePieCharted= summary1.first(10);
-		Figure f = PiePlot.create("Jobs/Company", tablePieCharted, "Company", "Count [Title]");
-		Plot.show(f);
+//		Table other= summary1.dropWhere(summary1)
+		
+		HashMap<String,Double> hm = new HashMap<String,Double> ();
+		
+		for (Row row : tablePieCharted) {
+			hm.put(row.getString("Company"),row.getDouble("Count [Title]"));
+		}
 
-//		Plot.show(new Figure(layout, trace));
-		return tablePieCharted.toString();
+
+		return hm;
 	}
 	
 	//6. Find out What are it the most popular job titles?  @Samy

@@ -29,7 +29,6 @@ public class Consumer {
 		String summary = restTemplate.getForObject(ROOT_URI+"summary", String.class);
 		return summary;
 
-<<<<<<< HEAD
 	}	
 	
 
@@ -44,8 +43,7 @@ public class Consumer {
 		return factorizzedYears;
 
 	}	
-=======
-	}
+	
 
 	public String clean()
 	{
@@ -60,12 +58,11 @@ public class Consumer {
 	}
 
 
-	public String jobsPerCompanyPie()
+	public HashMap<String,Double> jobsPerCompanyPie()
 	{
-		String jobsPerCompanyPie= restTemplate.getForObject(ROOT_URI+ "jobs/pieChart", String.class);
+		HashMap<String,Double> jobsPerCompanyPie= restTemplate.getForObject(ROOT_URI+ "jobs/pieChart", HashMap.class);
 		return jobsPerCompanyPie;
 	}
->>>>>>> branch 'master' of https://msaoudallah@github.com/msaoudallah/repo.git
 	
 	
 	
