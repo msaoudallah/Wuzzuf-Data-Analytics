@@ -1,6 +1,8 @@
 package frontend;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
@@ -28,6 +30,18 @@ public class Consumer {
 
 	}	
 	
+
+	public HashMap<String,Integer> skillsCount() {
+		HashMap<String,Integer> skills = restTemplate.getForObject(ROOT_URI+"skills/count", HashMap.class);
+		return skills;
+
+	}	
+	
+	public int[] yearsExpFactorization() {
+		int[] factorizzedYears = restTemplate.getForObject(ROOT_URI+"YearsExp/fatorize", int[].class);
+		return factorizzedYears;
+
+	}	
 	
 	
 	

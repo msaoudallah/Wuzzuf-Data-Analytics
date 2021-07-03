@@ -1,9 +1,14 @@
 package backend;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.csv.CSVFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,10 +16,17 @@ import dao.Wuzzuf;
 import dao.WuzzufDAOImp;
 
 import joinery.DataFrame;
+import smile.data.measure.NominalScale;
+import smile.data.vector.BaseVector;
+import smile.data.vector.DoubleVector;
+import smile.data.vector.IntVector;
 import smile.io.CSV;
-
+import smile.io.Read;
+import smile.io.Write;
+import smile.neighbor.lsh.Hash;
 //import tech.tablesaw.*;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
 
 
 @RestController
@@ -131,11 +143,24 @@ public class Apis {
 	// print top 10 skills with count for each
 	// change signature if needed
 	@GetMapping("/wuzzuf/skills/count")
-	public String skillsCount() {
+	public HashMap<String,Integer> skillsCount() throws IOException {
 
-		String res ="test";
-
-		return res;
+		Table df = Table.read().csv("Wuzzuf_Jobs.csv");
+		String res = "";
+		Column<String> skills = (Column<String>) df.column("Skills");
+		
+		HashMap<String,Integer> skillsMap = new HashMap<String,Integer> ();
+		for (String s : skills) {
+			String[] jobskills = s.split(", ");
+			for (String skill: jobskills) {
+				if (skillsMap.containsKey(skill)) {
+					skillsMap.put(skill,skillsMap.get(skill)+1);
+				}else {
+					skillsMap.put(skill,0);
+				}
+			}
+		}
+		return skillsMap;
 	}	
 	
 	
@@ -148,10 +173,27 @@ public class Apis {
 	// add new column in the same file with factorized data
 	// change signature if needed
 	@GetMapping("/wuzzuf/YearsExp/fatorize")
-	public String yearsExpFactorization() {
+	public int[] yearsExpFactorization() throws IOException, URISyntaxException {
 
-		String res ="test";
+		CSVFormat format = CSVFormat.DEFAULT.withFirstRecordAsHeader ();
+		smile.data.DataFrame df = Read.csv("Wuzzuf_Jobs.csv",format);  
+		
 
+		String[] values = df.stringVector("YearsExp").distinct().toArray (new String[]{});
+		int[] res = df.stringVector("YearsExp").factorize(  new NominalScale(values) ).toIntArray();
+
+		
+		BaseVector bs =   df.stringVector("YearsExp_Factorized").factorize( new NominalScale(values));
+		smile.data.DataFrame  YearsExp = smile.data.DataFrame.of(bs);
+		
+		df = df.merge(df,YearsExp);
+		
+
+
+		File f = java.io.File.createTempFile("Factorized", "csv");
+		
+		Write.csv(df, f.toPath(), format);
+		
 		return res;
 	}	
 	
