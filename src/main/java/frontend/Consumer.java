@@ -64,6 +64,17 @@ public class Consumer {
 		return jobsPerCompanyPie;
 	}
 
+	public HashMap<String,Integer> mostPopularJobTitles()
+	{
+		HashMap<String,Integer> popularJobTitles= restTemplate.getForObject(ROOT_URI+ "/jobs/count", HashMap.class);
+		return popularJobTitles;
+	}
+
+	public HashMap<String,Integer> mostPopularAreas()
+	{
+		HashMap<String,Integer> popularAreas= restTemplate.getForObject(ROOT_URI+ "/areas/count", HashMap.class);
+		return popularAreas;
+	}
 
 	
 	
