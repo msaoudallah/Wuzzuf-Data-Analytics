@@ -209,7 +209,7 @@ public class Apis {
 				if (skillsMap.containsKey(skill)) {
 					skillsMap.put(skill,skillsMap.get(skill)+1);
 				}else {
-					skillsMap.put(skill,0);
+					skillsMap.put(skill,1);
 				}
 			}
 		}

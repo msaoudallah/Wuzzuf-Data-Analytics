@@ -89,7 +89,24 @@ public class TestingClient {
 					new SwingWrapper(most_popular_areas_bar_chart).displayChart();
 					break;
 				case 8: //printing the count of each skill mentioned
-					System.out.println(consumer.skillsCount());
+					HashMap<String,Integer> skillsCount = consumer.skillsCount();
+					skillsCount
+			            = skillsCount.entrySet()
+			                  .stream()
+			                  .sorted((i2, i1)
+			                              -> i1.getValue().compareTo(
+			                                  i2.getValue()))
+			                  .limit(15)
+			                  .collect(Collectors.toMap(
+			                      Map.Entry::getKey,
+			                      Map.Entry::getValue,
+			                      (e1, e2) -> e1, LinkedHashMap::new));
+			 
+					System.out.println(skillsCount);
+					skillsCount.entrySet().forEach(entry -> {
+						System.out.println(entry.getKey() + " : " + entry.getValue());
+
+					});
 					break;
 				default:
 					break;
