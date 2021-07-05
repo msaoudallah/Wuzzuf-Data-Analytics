@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.csv.CSVFormat;
@@ -17,23 +18,12 @@ import static tech.tablesaw.aggregate.AggregateFunctions.*;
 //import tech.tablesaw.*;
 //import smile.plot.swing.Plot;
 import tech.tablesaw.api.*;
-
-
-import dao.Wuzzuf;
-import dao.WuzzufDAOImp;
-
-import joinery.DataFrame;
 import smile.data.measure.NominalScale;
-import smile.data.vector.BaseVector;
-import smile.data.vector.DoubleVector;
-import smile.data.vector.IntVector;
-import smile.io.CSV;
 import smile.io.Read;
-import smile.io.Write;
 import tech.tablesaw.columns.Column;
-
 //import tech.tablesaw.*;
 import tech.tablesaw.aggregate.AggregateFunctions;
+import tech.tablesaw.aggregate.Summarizer;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 
@@ -41,23 +31,16 @@ import tech.tablesaw.api.Table;
 @RestController
 public class Apis {
 
-	
-	//1. Read data set and convert it to dataframe or Spark RDD and display some from it.
-	// TODO
-	// read the csv file, and display head rows
-	// change signature if needed
+
 	@GetMapping("/wuzzuf/head")
 	public String head() throws IOException
 	{
 		Table df = Table.read().csv("Wuzzuf_Jobs.csv");
 		Table head= df.first(5);
-
 		return head.toString();
 	}	
 	
-	
-	
-	//2. Display structure and summary of the data.
+
 		@GetMapping("/wuzzuf/summary")
 	public String summary() throws IOException, URISyntaxException {
 
@@ -65,21 +48,14 @@ public class Apis {
 
 		Table df = Table.read().csv("Wuzzuf_Jobs.csv");
 		
-		res += df.summary().toString();
-		res += "\n";
 		res += df.shape();
+		res += "\n\n\n";		
+		res += df.summary().toString();
 		return res;
 	}
 		
 	
 
-	//3. Clean the data (null, duplications) @Othman
-	
-	// TODO
-	// read the csv file, clean it
-	// reomove null and duplicate rows
-	// change signature if needed
-	// save the new file into csv such that we use it in next steps
 	@GetMapping("/wuzzuf/clean")
 	public String clean() throws  IOException
 	{
@@ -100,14 +76,7 @@ public class Apis {
 		return result;
 	}
 	
-	//4. Count the jobs for each company and display that in order (What are the most demanding companies for jobs?) @Othman
-	//5. Show step 4 in a pie chart 	@Othman
-	
-	// TODO
-	// read the new csv file
-	// do step 4
-	// check how to return a pie chart (png file) ? 
-	// change signature if needed
+
 	@GetMapping("/wuzzuf/jobs/companies")
 	public String jobsPerCompany() throws IOException
 	{
@@ -120,39 +89,31 @@ public class Apis {
 	}
 
 	@GetMapping("/wuzzuf/jobs/pieChart")
-	public HashMap<String,Double> jobsPerCompanyPie() throws IOException
+	public LinkedHashMap<String,Double> jobsPerCompanyPie() throws IOException
 	{
 		Table df= cleaned_df();
 		Table jobsPerCompany= df.retainColumns("Company", "Title");
 		Table summary= jobsPerCompany.summarize("Title",  count).by("Company");
 		Table summary1= summary.sortDescendingOn("Count [Title]");
-
 		Table tablePieCharted= summary1.first(10);
-//		Table other= summary1.dropWhere(summary1)
-
-		HashMap<String,Double> hm = new HashMap<String,Double> ();
-
+		Double PieCount = (Double) tablePieCharted.summarize("Count [Title]",sum).apply().get(0, 0);
+		Double OtherCount = df.rowCount() - PieCount; 
+		
+		LinkedHashMap<String,Double> hm = new LinkedHashMap<String,Double> ();
 		for (Row row : tablePieCharted) {
 			hm.put(row.getString("Company"),row.getDouble("Count [Title]"));
 		}
-
+		hm.put("Other(Companies wth less than 10 jobs)",OtherCount);
 
 		return hm;
 	}
 	
-	//6. Find out What are it the most popular job titles?  @Samy
-	//7. Show step 6 in bar chart @Samy
-	// TODO
-	// read the new csv file
-	// do step 6
-	// check how to return a pie chart (png file) ? 
-	// change signature if needed
+
 	@GetMapping("/wuzzuf/jobs/count")
-	public HashMap<String,Integer> jobsCount() throws IOException, URISyntaxException {
-
-		Table wuzzuf_jobs = Table.read().csv("Wuzzuf_Jobs.csv");
+	public LinkedHashMap<String,Integer> jobsCount() throws IOException, URISyntaxException {
+		Table wuzzuf_jobs = cleaned_df();
 		Table results = wuzzuf_jobs.countBy("Title").sortDescendingOn("Count").first(10);
-		HashMap<String,Integer> intermediate = new HashMap<>();
+		LinkedHashMap<String,Integer> intermediate = new LinkedHashMap<>();
 		for (Row i:results)
 		{
 			intermediate.put(i.getString("Category"),i.getInt("Count"));
@@ -160,22 +121,13 @@ public class Apis {
 		return intermediate;
 	}	
 	
-	
-	//8. Find out the most popular areas?   @Samy
-	//9. Show step 8 in bar chart       @Samy
 
-
-	// TODO
-	// read the new csv file
-	// do step 8
-	// check how to return a bar chart (png file) ? 
-	// change signature if needed
 	@GetMapping("/wuzzuf/areas/count")
-	public HashMap<String,Integer> areasCount() throws IOException, URISyntaxException {
+	public LinkedHashMap<String,Integer> areasCount() throws IOException, URISyntaxException {
 
-		Table wuzzuf_jobs = Table.read().csv("Wuzzuf_Jobs.csv");
+		Table wuzzuf_jobs = cleaned_df();
 		Table results = wuzzuf_jobs.countBy("Location").sortDescendingOn("Count").first(10);
-		HashMap<String,Integer> intermediate = new HashMap<>();
+		LinkedHashMap<String,Integer> intermediate = new LinkedHashMap<>();
 		for (Row i:results)
 		{
 			intermediate.put(i.getString("Category"),i.getInt("Count"));
@@ -183,23 +135,11 @@ public class Apis {
 		return intermediate;
 	}	
 	
-	
-	//10. Print skills one by one and how many each repeated and order the output to  @SAIDDDDDDD
-	//find out the most important skills required?
-	
-	
-	// TODO
-	// read the new csv file
-	// read the skills column
-	// split by ','
-	// count repitions
-	// print top 10 skills with count for each
-	// change signature if needed
+
 	@GetMapping("/wuzzuf/skills/count")
 	public HashMap<String,Integer> skillsCount() throws IOException {
 
-		Table df = Table.read().csv("Wuzzuf_Jobs.csv");
-		String res = "";
+		Table df = cleaned_df();
 		Column<String> skills = (Column<String>) df.column("Skills");
 
 		HashMap<String,Integer> skillsMap = new HashMap<String,Integer> ();
@@ -216,55 +156,40 @@ public class Apis {
 		return skillsMap;
 	}	
 	
-	
-	//11. Factorize the YearsExp feature and convert it to numbers in new col. (Bounce )
-	
-	// TODO
-	// read the new csv file
-	// YearsExp column
-	// factorize (may be use smile in this step)
-	// add new column in the same file with factorized data
-	// change signature if needed
+
 	@GetMapping("/wuzzuf/YearsExp/fatorize")
-	public int[] yearsExpFactorization() throws IOException, URISyntaxException {
+	public String yearsExpFactorization() throws IOException, URISyntaxException {
 
 		CSVFormat format = CSVFormat.DEFAULT.withFirstRecordAsHeader ();
 		smile.data.DataFrame df = Read.csv("Wuzzuf_Jobs.csv",format);
-
-
 		String[] values = df.stringVector("YearsExp").distinct().toArray (new String[]{});
-		int[] res = df.stringVector("YearsExp").factorize(  new NominalScale(values) ).toIntArray();
-
-
-		BaseVector bs =   df.stringVector("YearsExp_Factorized").factorize( new NominalScale(values));
-		smile.data.DataFrame  YearsExp = smile.data.DataFrame.of(bs);
-
-		df = df.merge(df,YearsExp);
-
-
-
-		File f = java.io.File.createTempFile("Factorized", "csv");
-
-		Write.csv(df, f.toPath(), format);
-
+		int [] YearExpValues = df.stringVector("YearsExp").factorize(  new NominalScale(values) ).toIntArray();
+		Table wuzzuf_jobs = Table.read().csv("Wuzzuf_Jobs.csv");
+		IntColumn ic = IntColumn.create("YearsExp_Factorized", YearExpValues);
+		wuzzuf_jobs.addColumns(ic);	
+		String res = wuzzuf_jobs.sampleN(5).toString();
 		return res;
 	}	
-	
-	
-	//12. Apply K-means for job title and companies (Bounce )
-	// TODO
-	// read the new csv file
-	// YearsExp column
-	// factorize title and companies (may be use smile in this step)
-	// use smile to do  k-mean (or any other package if there is one)
-	// we need to formalize the output of the k-means and return it (image / text / .. ) ? 
-	// change signature if needed
 	@GetMapping("/wuzzuf/kmeans")
-	public String kmeans() {
+	public double[][] kmeans() throws IOException, URISyntaxException {
 
-		String res ="test";
+		CSVFormat format = CSVFormat.DEFAULT.withFirstRecordAsHeader ();
+		smile.data.DataFrame df = Read.csv("Wuzzuf_Jobs.csv",format);
+		String[] Companies = df.stringVector("Company").distinct().toArray (new String[]{});
+		String[] Title = df.stringVector("Title").distinct().toArray (new String[]{});
+		double [] CompaniesValues = df.stringVector("Company").factorize(  new NominalScale(Companies) ).toDoubleArray();
+		double [] TitleValues = df.stringVector("Title").factorize(  new NominalScale(Title) ).toDoubleArray();
+		double[][] kmeansData = new double[CompaniesValues.length][2];
+		for (int i = 0 ; i < CompaniesValues.length; i++) {
+			kmeansData[i][0] = CompaniesValues[i];
+			kmeansData[i][1] = TitleValues[i];
+		 }
+		
 
-		return res;
+		return kmeansData;
+		
+		
+		
 	}	
 	
 	

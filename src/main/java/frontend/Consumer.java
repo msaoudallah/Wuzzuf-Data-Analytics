@@ -3,6 +3,7 @@ package frontend;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
@@ -17,7 +18,7 @@ public class Consumer {
 	
 	final String ROOT_URI = "http://localhost:8080/wuzzuf/";
 
-	// to be updated
+
 	public String head() {
 		String head = restTemplate.getForObject(ROOT_URI+"head", String.class);
 		return head;
@@ -38,8 +39,8 @@ public class Consumer {
 
 	}	
 	
-	public int[] yearsExpFactorization() {
-		int[] factorizzedYears = restTemplate.getForObject(ROOT_URI+"YearsExp/fatorize", int[].class);
+	public String yearsExpFactorization() {
+		String factorizzedYears = restTemplate.getForObject(ROOT_URI+"YearsExp/fatorize",String.class);
 		return factorizzedYears;
 
 	}	
@@ -58,24 +59,28 @@ public class Consumer {
 	}
 
 
-	public HashMap<String,Double> jobsPerCompanyPie()
+	public LinkedHashMap<String,Double> jobsPerCompanyPie()
 	{
-		HashMap<String,Double> jobsPerCompanyPie= restTemplate.getForObject(ROOT_URI+ "jobs/pieChart", HashMap.class);
+		LinkedHashMap<String,Double> jobsPerCompanyPie= restTemplate.getForObject(ROOT_URI+ "jobs/pieChart", LinkedHashMap.class);
 		return jobsPerCompanyPie;
 	}
 
-	public HashMap<String,Integer> mostPopularJobTitles()
+	public LinkedHashMap<String,Integer> mostPopularJobTitles()
 	{
-		HashMap<String,Integer> popularJobTitles= restTemplate.getForObject(ROOT_URI+ "/jobs/count", HashMap.class);
+		LinkedHashMap<String,Integer> popularJobTitles= restTemplate.getForObject(ROOT_URI+ "/jobs/count", LinkedHashMap.class);
 		return popularJobTitles;
 	}
 
-	public HashMap<String,Integer> mostPopularAreas()
+	public LinkedHashMap<String,Integer> mostPopularAreas()
 	{
-		HashMap<String,Integer> popularAreas= restTemplate.getForObject(ROOT_URI+ "/areas/count", HashMap.class);
+		LinkedHashMap<String,Integer> popularAreas= restTemplate.getForObject(ROOT_URI+ "/areas/count", LinkedHashMap.class);
 		return popularAreas;
 	}
-
+	public double[][] kmeans()
+	{
+		double[][] kmeansData= restTemplate.getForObject(ROOT_URI+ "/kmeans", double[][].class);
+		return kmeansData;
+	}
 	
 	
 
