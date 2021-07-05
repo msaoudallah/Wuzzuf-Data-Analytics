@@ -24,6 +24,8 @@ import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.api.PiePlot;
 import tech.tablesaw.plotly.components.Figure;
 
+import javax.swing.*;
+
 public class TestingClient {
 	static Consumer consumer = new Consumer();
 	public static void main(String[] args) throws IOException, InvocationTargetException, InterruptedException {
@@ -73,8 +75,10 @@ public class TestingClient {
 					});
 
 					PieChart chart = new PieChartBuilder().width(800).height(600).title("Most Demanding Companies for jobs").build();
-					new SwingWrapper(chart).displayChart();
-
+					JFrame jobs_frame = new SwingWrapper(chart).displayChart();
+					javax.swing.SwingUtilities.invokeLater(
+							()->jobs_frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE)
+					);
 					for (int i =0; i<Count.size(); i++) {
 
 						chart.addSeries(Companies.get(i),Count.get(i));
@@ -87,7 +91,12 @@ public class TestingClient {
 					ArrayList<Integer> job_count = new ArrayList<Integer>(jobs_receiver.values());
 					most_popular_jobs_bar_chart.addSeries("Jobs",job_titles,job_count);
 					most_popular_jobs_bar_chart.getStyler().setXAxisLabelRotation(45);
-					new SwingWrapper(most_popular_jobs_bar_chart).displayChart();
+					JFrame jobs_frame_0 = new SwingWrapper(most_popular_jobs_bar_chart).displayChart();
+					javax.swing.SwingUtilities.invokeLater(
+							()->jobs_frame_0.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE)
+					);
+					jobs_frame_0.toFront();
+					jobs_frame_0.requestFocus();
 					break;
 				case 7:
 					LinkedHashMap<String,Integer> areas_receiver = consumer.mostPopularAreas();
@@ -95,7 +104,12 @@ public class TestingClient {
 					ArrayList<String> areas = new ArrayList<String>(areas_receiver.keySet());
 					ArrayList<Integer> areas_count = new ArrayList<Integer>(areas_receiver.values());
 					most_popular_areas_bar_chart.addSeries("Jobs",areas,areas_count);
-					new SwingWrapper(most_popular_areas_bar_chart).displayChart();
+					JFrame areas_frame = new SwingWrapper(most_popular_areas_bar_chart).displayChart();
+					javax.swing.SwingUtilities.invokeLater(
+							()->areas_frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE)
+					);
+					areas_frame.toFront();
+					areas_frame.requestFocus();
 					break;
 				case 8: //printing the count of each skill mentioned
 					HashMap<String,Integer> skillsCount = consumer.skillsCount();
@@ -123,7 +137,8 @@ public class TestingClient {
 				case 10 : // kmean clustering
 					 double[][] kmeansData = consumer.kmeans();
 					 KMeans km2 = PartitionClustering.run(10, () -> KMeans.fit(kmeansData, 10));
-					 ScatterPlot.of(kmeansData, km2.y, '.').canvas().setAxisLabel(0, "K-means Clustering").window();
+					 JFrame tmp_frame = ScatterPlot.of(kmeansData, km2.y, '.').canvas().setAxisLabel(0, "K-means Clustering").window();
+					 tmp_frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					 break;
 				default:
 					break;

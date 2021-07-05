@@ -78,6 +78,13 @@
 			<artifactId>smile-io</artifactId>
 			<version>2.6.0</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.github.haifengl/smile-core -->
+		<dependency>
+			<groupId>com.github.haifengl</groupId>
+			<artifactId>smile-core</artifactId>
+			<version>2.6.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.github.haifengl</groupId>
 			<artifactId>smile-plot</artifactId>
@@ -109,11 +116,27 @@
 			<version>0.8.1</version>
 		</dependency>
 
-<dependency>
-    <groupId>org.knowm.xchart</groupId>
-    <artifactId>xchart</artifactId>
-    <version>3.8.0</version>
-</dependency>
+		<dependency>
+			<groupId>org.knowm.xchart</groupId>
+			<artifactId>xchart</artifactId>
+			<version>3.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-base</artifactId>
+			<version>16</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>16</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-fxml</artifactId>
+			<version>16</version>
+		</dependency>
+
 
 
 
@@ -123,6 +146,14 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-maven-plugin</artifactId>
+				<version>0.0.6</version>
+				<configuration>
+					<mainClass>ConsumerFX</mainClass>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
