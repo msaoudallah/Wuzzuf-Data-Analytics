@@ -83,6 +83,8 @@ public class TestingClient {
 
 						chart.addSeries(Companies.get(i),Count.get(i));
 					}
+					jobs_frame.toFront();
+					jobs_frame.requestFocus();
 					break;
 				case 6:
 					LinkedHashMap<String,Integer> jobs_receiver = consumer.mostPopularJobTitles();
@@ -134,12 +136,14 @@ public class TestingClient {
 					String res = consumer.yearsExpFactorization();
 					System.out.println(res);
 					break;
-				case 10 : // kmean clustering
-					 double[][] kmeansData = consumer.kmeans();
-					 KMeans km2 = PartitionClustering.run(10, () -> KMeans.fit(kmeansData, 10));
-					 JFrame tmp_frame = ScatterPlot.of(kmeansData, km2.y, '.').canvas().setAxisLabel(0, "K-means Clustering").window();
-					 tmp_frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-					 break;
+				case 10: // kmean clustering
+					double[][] kmeansData = consumer.kmeans();
+					KMeans km2 = PartitionClustering.run(10, () -> KMeans.fit(kmeansData, 10));
+					JFrame tmp_frame = ScatterPlot.of(kmeansData, km2.y, '.').canvas().setAxisLabel(0, "K-means Clustering").window();
+					tmp_frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					tmp_frame.toFront();
+					tmp_frame.requestFocus();
+					break;
 				default:
 					break;
 			}
