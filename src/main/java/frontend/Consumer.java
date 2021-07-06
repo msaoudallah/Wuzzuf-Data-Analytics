@@ -1,15 +1,10 @@
 package frontend;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
-import dao.Wuzzuf;
-import joinery.DataFrame;
-import tech.tablesaw.plotly.components.Figure;
 
 public class Consumer {
 

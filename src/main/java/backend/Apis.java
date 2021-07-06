@@ -1,29 +1,17 @@
 package backend;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
-
 import org.apache.commons.csv.CSVFormat;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTPieChart;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import static tech.tablesaw.aggregate.AggregateFunctions.*;
-
-//import tech.tablesaw.*;
-//import smile.plot.swing.Plot;
 import tech.tablesaw.api.*;
 import smile.data.measure.NominalScale;
 import smile.io.Read;
 import tech.tablesaw.columns.Column;
-//import tech.tablesaw.*;
-import tech.tablesaw.aggregate.AggregateFunctions;
-import tech.tablesaw.aggregate.Summarizer;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 
