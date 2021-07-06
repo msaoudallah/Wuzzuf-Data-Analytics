@@ -11,8 +11,7 @@ This project is part of our 9-month ITI AI program, it is for Java and UML cours
   1. clone or download the repo on your local machine 
   2. import project to your favourite IDE (eclipse, intelliJ,..)
   3. start the server by running the Springboot Application from "/Application/src/main/java/com/example/Application/Application.java"
-  4. now it is only one step, run the desktop client to call the Springboot application and reterive the results
-For more detailed description about the project structure and running steps, please visit the 
-[Project Guide](https://docs.google.com/document/d/1HSle_NPxIxT_IHu0d2H8NVgjD9yBuOOAm2o9y07djA8/edit?usp=sharing)
+  4. now it is only one step, run the console application client from "/Application/src/main/java/frontend/TestingClient.java" to call the Springboot application and reterive the results<br/>
+###### For more detailed description about the project structure and running steps, please visit the [Project Guide](https://docs.google.com/document/d/1HSle_NPxIxT_IHu0d2H8NVgjD9yBuOOAm2o9y07djA8/edit?usp=sharing)
 
 
